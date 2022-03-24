@@ -130,21 +130,21 @@ class PatternPartialLoader implements Twig_LoaderInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getSource($name) {
+	public function getSource(string $name) {
 		return file_get_contents($this->findTemplate($name));
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getCacheKey($name) {
+	public function getCacheKey(string $name) {
 		return $this->findTemplate($name);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function exists($name) {
+	public function exists(string $name) {
 
 		$name = $this->normalizeName($name);
 
@@ -164,7 +164,7 @@ class PatternPartialLoader implements Twig_LoaderInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function isFresh($name, $time) {
+	public function isFresh(string $name, int $time) {
 		return filemtime($this->findTemplate($name)) <= $time;
 	}
 
