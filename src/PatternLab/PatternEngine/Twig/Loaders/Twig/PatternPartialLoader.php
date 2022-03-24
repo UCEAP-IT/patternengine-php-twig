@@ -16,6 +16,7 @@ namespace PatternLab\PatternEngine\Twig\Loaders\Twig;
 use \PatternLab\PatternEngine\Util;
 use Twig\Error\LoaderError as Twig_Error_Loader;
 use Twig\Loader\LoaderInterface as Twig_LoaderInterface;
+use Twig\Source;
 
 class PatternPartialLoader implements Twig_LoaderInterface {
 
@@ -125,6 +126,14 @@ class PatternPartialLoader implements Twig_LoaderInterface {
 			array_unshift($this->paths[$namespace], $path);
 		}
 
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getSourceContext(string $name): Source
+	{
+		return new Source($this->findTemplate($name), $name);
 	}
 
 	/**
