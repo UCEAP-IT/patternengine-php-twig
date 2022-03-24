@@ -23,9 +23,24 @@
 			"PatternLab\\PatternEngine\\Twig": "src/"
 		}
 	},
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "pattern-lab/core",
+				"version": "dev-develop",
+				"type": "library",
+				"source": {
+					"url": "https://github.com/UCEAP-IT/patternlab-php-core.git",
+					"type": "git",
+					"reference": "v3.0.0"
+				}
+			}
+		}
+	],
 	"require": {
-		"pattern-lab/core": "^2.0.0",
-		"twig/twig":        "~1.0"
+		"pattern-lab/core": "dev-develop",
+		"twig/twig":        "~3.0"
 	},
 	"extra": {
 		"patternlab": {
