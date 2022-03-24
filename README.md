@@ -81,7 +81,7 @@ How to use [Template Inheritance](http://twig.sensiolabs.org/doc/templates.html#
 * Files must have the extension `.twig`.
 * Files can be extended either by using Pattern Lab's normal shorthand syntax (e.g, `{% extends 'templates-extended-layout'%}`).
 * Files can optionally go in `source/_layouts` in order to hide them from the list of patterns and then you can just use the filename as reference (e.g., `{% extends 'extended-layout'%}`).
-* Files that are in the same directory can also just use the file name without the shorthand syntax (however, it must include the extension). So if `file1.twig` and `file2.twig` were in same directory, you could place this code in `file2.twig`: `{% extends 'file1.twig' %}`. 
+* Files that are in the same directory can also just use the file name without the shorthand syntax (however, it must include the extension). So if `file1.twig` and `file2.twig` were in same directory, you could place this code in `file2.twig`: `{% extends 'file1.twig' %}`.
 
 An example of a simple layout called `base.twig` in `source/_layouts`:
 
@@ -156,6 +156,8 @@ An example function called `rot13.filter.php` in `source/_twig-components/filter
 ```php
 <?php
 
+use Twig\TwigFilter as Twig_SimpleFilter;
+
 $filter = new Twig_SimpleFilter('rot13', function ($string) {
 	return str_rot13($string);
 });
@@ -211,11 +213,11 @@ An example of a simple test called `red.test.php` in `source/_twig-components/te
 <?php
 
 $test = new Twig_SimpleTest('red', function ($value) {
-	
+
 	if (isset($value["color"]) && $value["color"] == 'red') {
 		return true;
 	}
-	
+
 	return false;
 });
 
@@ -264,13 +266,13 @@ An example of a simple tag called `setdupe.tag.php` in `source/_twig-components/
 
 // these files are loaded three times and we can't re-set a class
 if (!class_exists("Project_setdupe_Node")) {
-	
+
 	class Project_setdupe_Node extends Twig_Node {
-		
+
 		public function __construct($name, Twig_Node_Expression $value, $line, $tag = null) {
 			parent::__construct(array('value' => $value), array('name' => $name), $line, $tag);
 		}
-		
+
 		public function compile(Twig_Compiler $compiler) {
 			$compiler
 				->addDebugInfo($this)
@@ -278,35 +280,35 @@ if (!class_exists("Project_setdupe_Node")) {
 				->subcompile($this->getNode('value'))
 				->raw(";\n");
 		}
-		
+
 	}
-	
+
 }
 
 // these files are loaded three times and we can't re-set a class
 if (!class_exists("Project_setdupe_TokenParser")) {
-	
+
 	class Project_setdupe_TokenParser extends Twig_TokenParser {
-		
+
 		public function parse(Twig_Token $token) {
-			
+
 			$parser = $this->parser;
 			$stream = $parser->getStream();
-			
+
 			$name = $stream->expect(Twig_Token::NAME_TYPE)->getValue();
 			$stream->expect(Twig_Token::OPERATOR_TYPE, '=');
 			$value = $parser->getExpressionParser()->parseExpression();
 			$stream->expect(Twig_Token::BLOCK_END_TYPE);
-			
+
 			return new Project_setdupe_Node($name, $value, $token->getLine(), $this->getTag());
 		}
-		
+
 		public function getTag() {
 			return 'setdupe';
 		}
-		
+
 	}
-	
+
 }
 
 ?>
