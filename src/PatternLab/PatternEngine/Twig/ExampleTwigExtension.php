@@ -2,10 +2,10 @@
 
 namespace PatternLab\PatternEngine\Twig;
 
-use Twig_Extension;
-use Twig_ExtensionInterface;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension as Twig_Extension;
+use Twig\Extension\ExtensionInterface as Twig_ExtensionInterface;
+use Twig\TwigFilter as Twig_SimpleFilter;
+use Twig\TwigFunction as Twig_SimpleFunction;
 
 class ExampleTwigExtension extends Twig_Extension implements Twig_ExtensionInterface {
 

@@ -16,30 +16,33 @@ namespace PatternLab\PatternEngine\Twig\Loaders;
 use \PatternLab\Config;
 use \PatternLab\Dispatcher;
 use \PatternLab\PatternEngine\Twig\Loaders\Twig\PatternPartialLoader as Twig_Loader_PatternPartialLoader;
-use \PatternLab\PatternEngine\Twig\Loaders\Twig\PatternStringLoader as Twig_Loader_PatternStringLoader;
 use \PatternLab\PatternEngine\Loader;
 use \PatternLab\PatternEngine\Twig\TwigUtil;
+use Twig\Loader\FilesystemLoader as Twig_Loader_Filesystem;
+use Twig\Environment as Twig_Environment;
+use Twig\Loader\ChainLoader as Twig_Loader_Chain;
+use Twig\Loader\ArrayLoader;
 
 class PatternLoader extends Loader {
-	
+
 	/**
 	* Load a new Twig instance that uses the Pattern Loader
 	*/
 	public function __construct($options = array()) {
-		
+
 		// set-up default vars
 		$twigDebug      = Config::getOption("twigDebug");
 		$twigAutoescape = Config::getOption("twigAutoescape");
-		
+
 		// go through various places where things can exist
 		$filesystemLoaderPaths = array();
-		
+
 		// see if source/_macros exists
 		$macrosPath = Config::getOption("sourceDir").DIRECTORY_SEPARATOR."_macros";
 		if (is_dir($macrosPath)) {
 			$filesystemLoaderPaths[] = $macrosPath;
 		}
-		
+
 		// see if source/_layouts exists. if so add it to be searchable
 		$layoutsPath = Config::getOption("sourceDir").DIRECTORY_SEPARATOR."_layouts";
 		if (is_dir($layoutsPath)) {
@@ -60,7 +63,7 @@ class PatternLoader extends Loader {
 				$filesystemLoaderPaths[] = $object->getPathname();
 			}
 		}
-		
+
 		// set-up the loader list in order that they should be checked
 		// 1. Patterns 2. Filesystem 3. String
 		$loaders   = array();
@@ -69,7 +72,7 @@ class PatternLoader extends Loader {
 
 		// 2. add the paths to the filesystem loader if the paths existed
 		if (count($filesystemLoaderPaths) > 0) {
-			$filesystemLoader = new \Twig_Loader_Filesystem($filesystemLoaderPaths);
+			$filesystemLoader = new Twig_Loader_Filesystem($filesystemLoaderPaths);
 			$loaders[] = TwigUtil::addPaths($filesystemLoader, $patternSourceDir);
 		}
 
@@ -84,12 +87,12 @@ class PatternLoader extends Loader {
 		// 3. add String loader
 		// This *must* go last or no loaders after will work ~ https://github.com/symfony/symfony/issues/10865
 		// @todo Remove `Twig_Loader_String` - if a Twig include path is wrong, this outputs the string anyway with no error ~ https://github.com/symfony/symfony/issues/10865
-		$loaders[] = new \Twig_Loader_String();
-		
+		$loaders[] = new ArrayLoader();
+
 		// set-up Twig
-		$twigLoader = new \Twig_Loader_Chain($loaders);
-		$instance   = new \Twig_Environment($twigLoader, array("debug" => $twigDebug, "autoescape" => $twigAutoescape));
-		
+		$twigLoader = new Twig_Loader_Chain($loaders);
+		$instance   = new Twig_Environment($twigLoader, array("debug" => $twigDebug, "autoescape" => $twigAutoescape));
+
 		// customize Twig
 		TwigUtil::setInstance($instance);
 		TwigUtil::loadCustomExtensions();
@@ -106,9 +109,9 @@ class PatternLoader extends Loader {
 
 		// get the instance
 		$this->instance = TwigUtil::getInstance();
-		
+
 	}
-	
+
 	/**
 	* Render a pattern
 	* @param  {Array}        the options to be rendered by Twig
@@ -116,7 +119,7 @@ class PatternLoader extends Loader {
 	* @return {String}       the rendered result
 	*/
 	public function render($options = array()) {
-		
+
 		$result = $this->instance->render($options["pattern"], $options["data"]);
 		// This error handler catches files that didn't render using any of the loaders.
 		// The most common scenario is when a file's contents get passed to and through `Twig_Loader_String` and
@@ -128,7 +131,7 @@ class PatternLoader extends Loader {
 		} else {
 			return $result;
 		}
-		
+
 	}
-	
+
 }
