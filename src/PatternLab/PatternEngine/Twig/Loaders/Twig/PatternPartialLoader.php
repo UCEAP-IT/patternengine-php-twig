@@ -33,8 +33,9 @@ class PatternPartialLoader extends Twig_FileSystemLoader implements Twig_LoaderI
    *
    * @param string|array $paths    A path or an array of paths where to look for templates
    * @param string|null  $rootPath The root path common to all relative paths (null for getcwd())
+   * @param array|null patternPaths array of patterns in theme.
    */
-  public function __construct($paths = [], string $rootPath = null, $patternPaths = [])) {
+  public function __construct($paths = [], string $rootPath = null, $patternPaths = []) {
     parent::__construct($paths, $rootPath);
     $options['patternPaths'] = $patternPaths['patternPaths'];
 
