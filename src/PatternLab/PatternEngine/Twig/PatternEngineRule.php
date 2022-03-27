@@ -12,17 +12,17 @@
 
 namespace PatternLab\PatternEngine\Twig;
 
-use \PatternLab\PatternEngine\Rule;
+use PatternLab\PatternEngine\Rule;
 
 class PatternEngineRule extends Rule {
-	
-	public function __construct() {
-		
-		parent::__construct();
-		
-		$this->engineProp = "twig";
-		$this->basePath   = "\PatternLab\PatternEngine\Twig";
-		
-	}
-	
+
+  public function __construct() {
+    
+    parent::__construct();
+
+    $this->engineProp = "twig";
+    $this->basePath   = "\PatternLab\PatternEngine\Twig";
+
+  }
+
 }
