@@ -68,7 +68,7 @@ class PatternLoader extends Loader {
     // 1. Patterns 2. Filesystem 3. String
     $loaders   = [];
     // 1. add Patterns
-    $loaders[] = new Twig_Loader_PatternPartialLoader(Config::getOption("patternSourceDir"), NULL, ["patternPaths" => $options["patternPaths"]]));
+    $loaders[] = new Twig_Loader_PatternPartialLoader(Config::getOption("patternSourceDir"), NULL, ["patternPaths" => $options["patternPaths"]]);
 
     // 2. add the paths to the filesystem loader if the paths existed
     if (count($filesystemLoaderPaths) > 0) {
